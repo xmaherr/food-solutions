@@ -1,0 +1,247 @@
+Create a full Laravel 11 project with the following specifications:
+
+---
+
+## TECH STACK
+
+- Laravel 11
+- MySQL database
+- Blade templating for dashboard
+- Laravel Sanctum for API auth (optional, no auth required on public APIs)
+- Tailwind CSS for dashboard UI (via CDN is fine)
+- Laravel Mail for sending emails
+
+---
+
+## DATABASE SCHEMA
+
+### 1. users (admin users)
+
+- id
+- name
+- email (unique)
+- password
+- role (enum: 'admin', 'superadmin') default: 'admin'
+- timestamps
+
+### 2. services
+
+- id
+- title_ar (string)
+- icon (string - URL or path)
+- short_description_ar (text)
+- long_description_ar (text)
+- points (json - array of strings)
+- image (string - URL or path)
+- sort_order (integer, default 0)
+- is_active (boolean, default true)
+- timestamps
+
+### 3. contacts
+
+- id
+- type (enum: 'contact', 'social')
+- title (string)
+- icon (string)
+- value (string)
+- link (string)
+- sort_order (integer, default 0)
+- is_active (boolean, default true)
+- timestamps
+
+### 4. settings
+
+- id
+- key (string, unique)
+- value (text)
+- timestamps
+
+Seed settings table with:
+
+- key: 'consultation_email', value: 'admin@example.com'
+
+### 5. consultations
+
+- id
+- name (string)
+- phone (string)
+- email (string)
+- service_id (foreign key -> services.id, nullable)
+- message (text, nullable)
+- is_read (boolean, default false)
+- timestamps
+
+---
+
+## PUBLIC REST APIs (no authentication required)
+
+Base prefix: /api
+
+### GET /api/services
+
+Returns all active services.
+Response:
+{
+"total": 2,
+"data": [
+{
+"id": 1,
+"title_ar": "...",
+"icon": "...",
+"short_description_ar": "...",
+"long_description_ar": "...",
+"points": ["...", "..."],
+"image": "..."
+}
+]
+}
+
+### GET /api/services/lookup
+
+Returns lightweight list of active services for dropdowns.
+Response:
+{
+"total": 3,
+"data": [
+{ "id": 1, "title": "..." }
+]
+}
+
+### GET /api/contacts
+
+Returns all active contacts and socials.
+Response:
+{
+"total_contacts": 2,
+"contacts": [ { "title": "...", "icon": "...", "value": "...", "link": "..." } ],
+"total_socials": 3,
+"socials": [ { "title": "...", "icon": "...", "value": "...", "link": "..." } ]
+}
+
+### POST /api/consultation
+
+Accepts JSON
+Required fields: name, phone, email, service_id
+Optional fields: message
+
+Validation rules:
+
+- name: required|string|max:255
+- phone: required|string|max:30
+- email: required|email
+- service_id: required|exists:services,id
+- message: nullable|string|max:4000
+
+On success:
+
+1. Save consultation record to database
+2. Send email to the value of settings where key = 'consultation_email'
+3. Email subject: "طلب استشارة جديد - {name}"
+4. Email body (Blade template): show all submitted fields nicely formatted in Arabic/English
+5. Return:
+   {
+   "success": true,
+   "message": "تم إرسال طلبك بنجاح، سنتواصل معك قريباً"
+   }
+
+On validation failure return 422:
+{
+"message": "The given data was invalid.",
+"errors": { "field": ["error message"] }
+}
+
+---
+
+## ADMIN DASHBOARD (web routes, prefix: /admin)
+
+### Authentication
+
+- /admin/login - Login page (email + password form)
+- /admin/logout - POST logout
+- Protect all /admin/\* routes with auth middleware
+- After login redirect to /admin/dashboard
+- Default seeded admin: email: admin@admin.com, password: password
+
+### Dashboard Home (/admin/dashboard)
+
+- Stats cards: total services, total contacts, total socials, total consultations (unread count highlighted)
+
+### Services Management (/admin/services)
+
+- Index: table listing all services with sort_order, is_active toggle, edit/delete buttons, "Add New" button
+- Create: form with all fields (title_ar, icon URL input, short_description_ar, long_description_ar, points (dynamic add/remove rows with JS), image URL input, sort_order, is_active)
+- Edit: same form pre-filled
+- Delete: with confirmation
+- points field should be a dynamic list: user can click "Add Point" to add a new text input row and remove any row
+
+### Contacts Management (/admin/contacts)
+
+- Index: table showing all contacts and socials, separated by type, with edit/delete/add buttons
+- Create: form with fields (type dropdown: contact or social, title, icon URL, value, link, sort_order, is_active)
+- Edit: same form pre-filled
+- Delete: with confirmation
+
+### Consultations (/admin/consultations)
+
+- Index: table showing all consultations (name, phone, email, service name, message truncated, date, read status)
+- Show: detail view of a single consultation, mark as read automatically when opened
+- Delete: with confirmation
+- Filter by: read/unread
+
+### Settings (/admin/settings)
+
+- Single page form with:
+  1. Consultation Email (the email address to receive consultation notifications) - input type email
+  2. Site Name - text input
+- Save button updates the settings table
+
+### User Management (/admin/users)
+
+- Index: table of all admin users with name, email, role, edit/delete buttons, "Add New" button
+- Create: form (name, email, password, password_confirmation, role)
+- Edit: form (name, email, role, optional new password)
+- Delete: cannot delete own account
+- Roles: admin, superadmin
+
+---
+
+## FILE STRUCTURE NOTES
+
+- Use Resource Controllers for all dashboard sections
+- API controllers go in App\Http\Controllers\Api
+- Dashboard controllers go in App\Http\Controllers\Admin
+- Create a Mailable class: App\Mail\ConsultationMail
+- Use Form Request classes for validation
+- Use database seeders for: AdminUserSeeder, SettingsSeeder
+- Add CORS headers for API routes (use Laravel's built-in cors config, allow all origins)
+
+---
+
+## ADDITIONAL REQUIREMENTS
+
+- All API responses use consistent JSON format
+- Dashboard uses a shared Blade layout (layouts/admin.blade.php) with sidebar navigation
+- Sidebar links: Dashboard, Services, Contacts, Consultations (with unread badge), Settings, Users, Logout
+- Flash success/error messages displayed on all dashboard pages
+- All file uploads for icons and images are URL strings (no file upload needed, just text input for URLs)
+- Add basic responsive design to dashboard using Tailwind CSS
+- Include a DatabaseSeeder that calls all seeders
+- .env.example should document: DB*\*, MAIL*\* variables
+- Use Laravel's built-in SMTP mail configuration via .env
+
+---
+
+## DELIVERABLES
+
+1. Full Laravel project file structure
+2. All migrations
+3. All models with relationships (Service, Contact, Consultation, Setting, User)
+4. All seeders
+5. API controllers with proper responses
+6. Admin controllers (Resource)
+7. Form Request validation classes
+8. ConsultationMail Mailable + Blade email template
+9. All Blade views for dashboard
+10. routes/api.php and routes/web.php
+11. CORS config update
+12. README.md with setup instructions (composer install, migrate, seed, env setup)

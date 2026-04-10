@@ -1,0 +1,84 @@
+Regenerating docs default
+
+   ErrorException 
+
+  Required @OA\PathItem() not found
+
+  at vendor\zircote\swagger-php\src\Loggers\DefaultLogger.php:23
+     19▕         }
+     20▕ 
+     21▕         $error_level = in_array($level, [LogLevel::NOTICE, LogLevel::INFO]) ? E_USER_NOTICE : E_USER_WARNING;
+     22▕ 
+  ➜  23▕         trigger_error($message, $error_level);
+     24▕     }
+     25▕ }
+     26▕
+
+  1   vendor\zircote\swagger-php\src\Loggers\DefaultLogger.php:23
+
+  2   vendor\psr\log\src\LoggerTrait.php:61
+      OpenApi\Loggers\DefaultLogger::log("warning", "Required @OA\PathItem() not found", [])
+
+  3   vendor\zircote\swagger-php\src\Annotations\OpenApi.php:178
+      Psr\Log\AbstractLogger::warning("Required @OA\PathItem() not found")
+
+  4   vendor\zircote\swagger-php\src\Analysis.php:392
+      OpenApi\Annotations\OpenApi::validate()
+
+  5   vendor\zircote\swagger-php\src\Generator.php:408
+      OpenApi\Analysis::validate()
+
+  6   vendor\darkaonline\l5-swagger\src\Generator.php:177
+      OpenApi\Generator::generate(Object(OpenApi\SourceFinder), Object(OpenApi\Analysis))
+
+  7   vendor\darkaonline\l5-swagger\src\Generator.php:118
+      L5Swagger\Generator::scanFilesForDocumentation()
+
+  8   vendor\darkaonline\l5-swagger\src\Console\GenerateDocsCommand.php:73
+      L5Swagger\Generator::generateDocs()
+
+  9   vendor\darkaonline\l5-swagger\src\Console\GenerateDocsCommand.php:56
+      L5Swagger\Console\GenerateDocsCommand::generateDocumentation(Object(L5Swagger\GeneratorFactory), "default")
+
+  10  vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:36
+      L5Swagger\Console\GenerateDocsCommand::handle(Object(L5Swagger\GeneratorFactory))
+
+  11  vendor\laravel\framework\src\Illuminate\Container\Util.php:43
+      Illuminate\Container\BoundMethod::Illuminate\Container\{closure}()
+
+  12  vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:96
+      Illuminate\Container\Util::unwrapIfClosure(Object(Closure))
+
+  13  vendor\laravel\framework\src\Illuminate\Container\BoundMethod.php:35
+      Illuminate\Container\BoundMethod::callBoundMethod(Object(Illuminate\Foundation\Application), Object(Closure))
+
+  14  vendor\laravel\framework\src\Illuminate\Container\Container.php:799
+      Illuminate\Container\BoundMethod::call(Object(Illuminate\Foundation\Application), [])
+
+  15  vendor\laravel\framework\src\Illuminate\Console\Command.php:211
+      Illuminate\Container\Container::call()
+
+  16  vendor\symfony\console\Command\Command.php:341
+      Illuminate\Console\Command::execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Illuminate\Console\OutputStyle))
+
+  17  vendor\laravel\framework\src\Illuminate\Console\Command.php:180
+      Symfony\Component\Console\Command\Command::run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Illuminate\Console\OutputStyle))
+
+  18  vendor\symfony\console\Application.php:1117
+      Illuminate\Console\Command::run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+
+  19  vendor\symfony\console\Application.php:356
+      Symfony\Component\Console\Application::doRunCommand(Object(L5Swagger\Console\GenerateDocsCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+
+  20  vendor\symfony\console\Application.php:195
+      Symfony\Component\Console\Application::doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+
+  21  vendor\laravel\framework\src\Illuminate\Foundation\Console\Kernel.php:198
+      Symfony\Component\Console\Application::run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+
+  22  vendor\laravel\framework\src\Illuminate\Foundation\Application.php:1235
+      Illuminate\Foundation\Console\Kernel::handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+
+  23  artisan:16
+      Illuminate\Foundation\Application::handleCommand(Object(Symfony\Component\Console\Input\ArgvInput))
+
