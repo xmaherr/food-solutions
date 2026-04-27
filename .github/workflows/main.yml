@@ -1,31 +1,36 @@
-name: Deploy Food solutions Project
+name: Automated Deployment
 
 on:
   push:
-    branches: [ main ] 
+    branches: [ main ]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: SSH and Deploy to VPS
-        uses: appleboy/ssh-action@master
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          port: 22
           script: |
-            cd /var/www/my-app # اتأكد إن ده نفس اسم فولدر مشروعك على السيرفر
-            git pull origin main
+            # إنشاء المجلد لو مش موجود
+            sudo mkdir -p /var/www/my-app
+            sudo chown -R $USER:$USER /var/www/my-app
+            
+            # الدخول للمجلد وعمل Clone لو أول مرة، أو Pull لو موجود
+            cd /var/www
+            if [ ! -d "my-app/.git" ]; then
+              git clone git@github.com:${{ github.repository }}.git my-app
+            else
+              cd my-app && git pull origin main
+            fi
+            
+            # تنفيذ أوامر لارفيل
+            cd /var/www/my-app
             composer install --no-dev --optimize-autoloader
-            php artisan migrate --force
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
-            # لو بتستخدم Laravel 11 وما فوق ممكن تحتاج الأمر ده
-            # php artisan optimize 
-            systemctl restart php-fpm
+            
+            # ضبط الصلاحيات لـ Nginx في كل مرة لضمان العمل
+            sudo chown -R nginx:nginx /var/www/my-app
+            sudo chmod -R 775 /var/www/my-app/storage
