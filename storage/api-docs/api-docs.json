@@ -127,8 +127,19 @@
                                             "type": "array",
                                             "items": {
                                                 "properties": {
-                                                    "title": {
-                                                        "type": "string"
+                                                    "platform": {
+                                                        "properties": {
+                                                            "id": {
+                                                                "type": "integer"
+                                                            },
+                                                            "name": {
+                                                                "type": "string"
+                                                            },
+                                                            "color": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     },
                                                     "icon": {
                                                         "type": "string"
@@ -138,6 +149,58 @@
                                                     },
                                                     "link": {
                                                         "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/home": {
+            "get": {
+                "tags": [
+                    "Home"
+                ],
+                "summary": "Get all home sections",
+                "operationId": "d65ef76cbb32ae304c5a24c525b95adb",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "total": {
+                                            "type": "integer"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "image": {
+                                                        "type": "string"
+                                                    },
+                                                    "title": {
+                                                        "type": "string"
+                                                    },
+                                                    "subtitle": {
+                                                        "type": "string"
+                                                    },
+                                                    "description": {
+                                                        "type": "string"
+                                                    },
+                                                    "sort_order": {
+                                                        "type": "integer"
                                                     }
                                                 },
                                                 "type": "object"
@@ -249,6 +312,50 @@
                     }
                 }
             }
+        },
+        "/api/statistics": {
+            "get": {
+                "tags": [
+                    "Statistics"
+                ],
+                "summary": "Get company statistics",
+                "operationId": "c3a68a99fc89aebee2a2610c4d81badf",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "years_of_experience": {
+                                                    "type": "integer",
+                                                    "example": 10
+                                                },
+                                                "clients_count": {
+                                                    "type": "integer",
+                                                    "example": 250
+                                                },
+                                                "projects_count": {
+                                                    "type": "integer",
+                                                    "example": 180
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "tags": [
@@ -261,8 +368,16 @@
             "description": "Contacts"
         },
         {
+            "name": "Home",
+            "description": "Home"
+        },
+        {
             "name": "Services",
             "description": "Services"
+        },
+        {
+            "name": "Statistics",
+            "description": "Statistics"
         }
     ]
 }

@@ -19,8 +19,12 @@
                 <textarea name="long_description_ar" class="w-full border rounded px-3 py-2" rows="4" required></textarea>
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Image / Icon File</label>
+                <label class="block text-gray-700 mb-2">Image File</label>
                 <input type="file" name="image" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div>
+                <label class="block text-gray-700 mb-2">Icon File</label>
+                <input type="file" name="icon" class="w-full border rounded px-3 py-2" required>
             </div>
             <div>
                 <label class="block text-gray-700 mb-2">Sort Order</label>

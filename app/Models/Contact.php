@@ -17,9 +17,15 @@ class Contact extends Model
         'link',
         'sort_order',
         'is_active',
+        'platform_id',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    public function platform()
+    {
+        return $this->belongsTo(Platform::class);
+    }
 }

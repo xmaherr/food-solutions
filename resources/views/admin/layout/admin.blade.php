@@ -27,10 +27,12 @@
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2">
             <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 hover:bg-secondary/20 rounded">Dashboard</a>
+            <a href="{{ route('admin.home-sections.index') }}" class="block px-4 py-2 hover:bg-secondary/20 rounded">Home Sections</a>
             <a href="{{ route('admin.services.index') }}" class="block px-4 py-2 hover:bg-secondary/20 rounded">Services</a>
             <a href="{{ route('admin.contacts.index') }}" class="block px-4 py-2 hover:bg-secondary/20 rounded">Contacts</a>
             <a href="{{ route('admin.consultations.index') }}" class="block px-4 py-2 hover:bg-secondary/20 rounded">Consultations</a>
             <a href="{{ route('admin.settings.index') }}" class="block px-4 py-2 hover:bg-secondary/20 rounded">Settings</a>
+            <a href="{{ route('admin.statistics.index') }}" class="block px-4 py-2 hover:bg-secondary/20 rounded">Statistics</a>
             <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 hover:bg-secondary/20 rounded">Users</a>
         </nav>
         <div class="px-4 py-6">

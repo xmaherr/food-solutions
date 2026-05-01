@@ -7,14 +7,23 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label class="block text-gray-700 mb-2">Type</label>
-                <select name="type" class="w-full border rounded px-3 py-2">
+                <select name="type" id="type-select" class="w-full border rounded px-3 py-2" onchange="toggleType()">
                     <option value="contact" {{ $contact->type == 'contact' ? 'selected' : '' }}>Contact</option>
                     <option value="social" {{ $contact->type == 'social' ? 'selected' : '' }}>Social</option>
                 </select>
             </div>
-            <div>
+            <div id="title-container">
                 <label class="block text-gray-700 mb-2">Title</label>
-                <input type="text" name="title" value="{{ $contact->title }}" class="w-full border rounded px-3 py-2" required>
+                <input type="text" name="title" id="title-input" value="{{ $contact->title }}" class="w-full border rounded px-3 py-2" required>
+            </div>
+            <div id="platform-container" style="display: none;">
+                <label class="block text-gray-700 mb-2">Platform</label>
+                <select name="platform_id" id="platform-select" class="w-full border rounded px-3 py-2">
+                    <option value="">Select Platform</option>
+                    @foreach($platforms as $platform)
+                        <option value="{{ $platform->id }}" {{ $contact->platform_id == $platform->id ? 'selected' : '' }}>{{ $platform->name }}</option>
+                    @endforeach
+                </select>
             </div>
             <div>
                 <label class="block text-gray-700 mb-2">Icon File</label>
@@ -48,4 +57,28 @@
         </div>
     </form>
 </div>
+<script>
+    function toggleType() {
+        const type = document.getElementById('type-select').value;
+        const titleContainer = document.getElementById('title-container');
+        const platformContainer = document.getElementById('platform-container');
+        const titleInput = document.getElementById('title-input');
+        const platformSelect = document.getElementById('platform-select');
+
+        if (type === 'social') {
+            titleContainer.style.display = 'none';
+            platformContainer.style.display = 'block';
+            titleInput.removeAttribute('required');
+            platformSelect.setAttribute('required', 'required');
+        } else {
+            titleContainer.style.display = 'block';
+            platformContainer.style.display = 'none';
+            titleInput.setAttribute('required', 'required');
+            platformSelect.removeAttribute('required');
+        }
+    }
+    
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', toggleType);
+</script>
 @endsection

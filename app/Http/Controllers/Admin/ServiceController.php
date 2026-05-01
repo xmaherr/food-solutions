@@ -27,6 +27,7 @@ class ServiceController extends Controller
             'short_description_ar' => 'required|string',
             'long_description_ar' => 'required|string',
             'image' => 'required|file|image|max:5120',
+            'icon' => 'required|file|image|max:5120',
             'sort_order' => 'integer',
             'points' => 'nullable|array'
         ]);
@@ -34,8 +35,10 @@ class ServiceController extends Controller
         if ($request->hasFile('image')) {
             $data['image'] = $uploadService->upload($request->file('image'), 'images/services');
         }
-
-        $data['icon'] = '-'; // DB requires it, but user requested one field for both
+        
+        if ($request->hasFile('icon')) {
+            $data['icon'] = $uploadService->upload($request->file('icon'), 'icons/services');
+        }
 
         $data['is_active'] = $request->has('is_active');
         
@@ -55,6 +58,7 @@ class ServiceController extends Controller
             'short_description_ar' => 'required|string',
             'long_description_ar' => 'required|string',
             'image' => 'nullable|file|image|max:5120',
+            'icon' => 'nullable|file|image|max:5120',
             'sort_order' => 'integer',
             'points' => 'nullable|array'
         ]);
@@ -64,8 +68,12 @@ class ServiceController extends Controller
         } else {
             unset($data['image']);
         }
-
-        $data['icon'] = '-'; // DB requires it, but user requested one field for both
+        
+        if ($request->hasFile('icon')) {
+            $data['icon'] = $uploadService->upload($request->file('icon'), 'icons/services', $service->getRawOriginal('icon'));
+        } else {
+            unset($data['icon']);
+        }
 
         $data['is_active'] = $request->has('is_active');
         
@@ -76,6 +84,7 @@ class ServiceController extends Controller
     public function destroy(Service $service, ImageUploadService $uploadService)
     {
         $uploadService->delete($service->getRawOriginal('image'));
+        $uploadService->delete($service->getRawOriginal('icon'));
         $service->delete();
         return redirect()->route('admin.services.index')->with('success', 'Service deleted successfully.');
     }

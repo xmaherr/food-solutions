@@ -39,7 +39,15 @@ class ContactController extends Controller
                             items: new OA\Items(
                                 type: "object",
                                 properties: [
-                                    new OA\Property(property: "title", type: "string"),
+                                    new OA\Property(
+                                        property: "platform",
+                                        type: "object",
+                                        properties: [
+                                            new OA\Property(property: "id", type: "integer"),
+                                            new OA\Property(property: "name", type: "string"),
+                                            new OA\Property(property: "color", type: "string")
+                                        ]
+                                    ),
                                     new OA\Property(property: "icon", type: "string"),
                                     new OA\Property(property: "value", type: "string"),
                                     new OA\Property(property: "link", type: "string")
@@ -54,13 +62,27 @@ class ContactController extends Controller
     public function index()
     {
         $contacts = Contact::where('is_active', true)->where('type', 'contact')->orderBy('sort_order')->get(['title', 'icon', 'value', 'link']);
-        $socials = Contact::where('is_active', true)->where('type', 'social')->orderBy('sort_order')->get(['title', 'icon', 'value', 'link']);
+        $socials = Contact::with('platform')->where('is_active', true)->where('type', 'social')->orderBy('sort_order')->get(['icon', 'value', 'link', 'platform_id']);
+
+        $socialsFormatted = $socials->map(function ($social) {
+            return [
+                'platform' => $social->platform ? [
+                    'id' => $social->platform->id,
+                    'name' => $social->platform->name,
+                    'color' => $social->platform->color,
+                ] : null,
+                'icon' => $social->icon,
+                'value' => $social->value,
+                'link' => $social->link,
+            ];
+        });
 
         return response()->json([
             'total_contacts' => $contacts->count(),
             'contacts' => $contacts,
             'total_socials' => $socials->count(),
-            'socials' => $socials
+            'total_socials' => $socialsFormatted->count(),
+            'socials' => $socialsFormatted
         ]);
     }
 }

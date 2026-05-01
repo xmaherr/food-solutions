@@ -19,11 +19,19 @@
                 <textarea name="long_description_ar" class="w-full border rounded px-3 py-2" rows="4" required>{{ $service->long_description_ar }}</textarea>
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Image / Icon File</label>
+                <label class="block text-gray-700 mb-2">Image File</label>
                 <input type="file" name="image" class="w-full border rounded px-3 py-2 mb-2">
                 @if($service->image)
-                    <img src="{{ $service->image }}" class="w-24 h-24 object-cover border" alt="Current File">
-                    <p class="text-xs text-gray-500 mt-1">Leave empty to keep existing file.</p>
+                    <img src="{{ $service->image }}" class="w-24 h-24 object-cover border" alt="Current Image">
+                    <p class="text-xs text-gray-500 mt-1">Leave empty to keep existing image.</p>
+                @endif
+            </div>
+            <div>
+                <label class="block text-gray-700 mb-2">Icon File</label>
+                <input type="file" name="icon" class="w-full border rounded px-3 py-2 mb-2">
+                @if($service->icon && $service->icon !== '-')
+                    <img src="{{ $service->icon }}" class="w-24 h-24 object-cover border" alt="Current Icon">
+                    <p class="text-xs text-gray-500 mt-1">Leave empty to keep existing icon.</p>
                 @endif
             </div>
             <div>

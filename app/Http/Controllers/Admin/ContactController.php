@@ -17,19 +17,28 @@ class ContactController extends Controller
 
     public function create()
     {
-        return view('admin.contacts.create');
+        $platforms = \App\Models\Platform::all();
+        return view('admin.contacts.create', compact('platforms'));
     }
 
     public function store(Request $request, ImageUploadService $uploadService)
     {
         $data = $request->validate([
             'type' => 'required|in:contact,social',
-            'title' => 'required|string|max:255',
+            'title' => 'required_if:type,contact|string|max:255|nullable',
+            'platform_id' => 'required_if:type,social|exists:platforms,id|nullable',
             'icon' => 'required|file|max:5120',
             'value' => 'required|string|max:255',
             'link' => 'nullable|string|max:255',
             'sort_order' => 'integer',
         ]);
+
+        if ($data['type'] === 'social') {
+            $platform = \App\Models\Platform::find($data['platform_id']);
+            $data['title'] = strtoupper($platform->name);
+        } else {
+            $data['platform_id'] = null;
+        }
 
         if ($request->hasFile('icon')) {
             $data['icon'] = $uploadService->upload($request->file('icon'), 'images/icons');
@@ -43,19 +52,28 @@ class ContactController extends Controller
 
     public function edit(Contact $contact)
     {
-        return view('admin.contacts.edit', compact('contact'));
+        $platforms = \App\Models\Platform::all();
+        return view('admin.contacts.edit', compact('contact', 'platforms'));
     }
 
     public function update(Request $request, Contact $contact, ImageUploadService $uploadService)
     {
         $data = $request->validate([
             'type' => 'required|in:contact,social',
-            'title' => 'required|string|max:255',
+            'title' => 'required_if:type,contact|string|max:255|nullable',
+            'platform_id' => 'required_if:type,social|exists:platforms,id|nullable',
             'icon' => 'nullable|file|max:5120',
             'value' => 'required|string|max:255',
             'link' => 'nullable|string|max:255',
             'sort_order' => 'integer',
         ]);
+
+        if ($data['type'] === 'social') {
+            $platform = \App\Models\Platform::find($data['platform_id']);
+            $data['title'] = strtoupper($platform->name);
+        } else {
+            $data['platform_id'] = null;
+        }
 
         if ($request->hasFile('icon')) {
             $data['icon'] = $uploadService->upload($request->file('icon'), 'images/icons', $contact->getRawOriginal('icon'));
