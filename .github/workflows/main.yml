@@ -35,6 +35,9 @@ jobs:
             php artisan migrate --force
             php artisan db:seed --class=StatisticSeeder --force
             
+            # Clear cached views, routes, and config to show new updates
+            php artisan optimize:clear
+            
             # Generate updated API docs
             php artisan l5-swagger:generate
             
