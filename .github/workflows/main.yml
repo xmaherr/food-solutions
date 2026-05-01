@@ -31,6 +31,13 @@ jobs:
             cd /var/www/my-app
             composer install --no-dev --optimize-autoloader
             
+            # Run database migrations and seeders
+            php artisan migrate --force
+            php artisan db:seed --class=StatisticSeeder --force
+            
+            # Generate updated API docs
+            php artisan l5-swagger:generate
+            
             # ضبط الصلاحيات لـ Nginx في كل مرة لضمان العمل
             sudo chown -R nginx:nginx /var/www/my-app
-            sudo chmod -R 775 /var/www/my-app/storage
+            sudo chmod -R 775 /var/www/my-app/storage /var/www/my-app/bootstrap/cache
