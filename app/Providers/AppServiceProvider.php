@@ -21,10 +21,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         LogViewer::auth(function ($request) {
-            return $request->user()
-                && in_array($request->user()->email, [
-                    env('LOG_VIEWER_EMAIL'),
-                ]);
+            return $request->user() && $request->user()->role === 'superadmin';
         });
     }
 }
