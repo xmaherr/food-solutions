@@ -19,28 +19,39 @@ jobs:
             sudo mkdir -p /var/www/my-app
             sudo chown -R $USER:$USER /var/www/my-app
             
-            # الدخول للمجلد وعمل Clone لو أول مرة، أو Pull لو موجود
-            cd /var/www
-            if [ ! -d "my-app/.git" ]; then
-              git clone git@github.com:${{ github.repository }}.git my-app
+            # Clone or pull
+            if [ ! -d "/var/www/my-app/.git" ]; then
+              git clone git@github.com:${{ github.repository }}.git /var/www/my-app
             else
-              cd my-app && git pull origin main
+              cd /var/www/my-app
+              # Discard any local changes and untracked files to avoid conflicts
+              git fetch origin
+              git reset --hard origin/main
+              git clean -fd
             fi
-            
-            # تنفيذ أوامر لارفيل
+
             cd /var/www/my-app
+
+            # Install dependencies
             composer install --no-dev --optimize-autoloader
-            
-            # Run database migrations and seeders
+
+            # Run migrations and seeders
             php artisan migrate --force
             php artisan db:seed --class=StatisticSeeder --force
-            
-            # Clear cached views, routes, and config to show new updates
+
+            # Clear all caches
             php artisan optimize:clear
-            
-            # Generate updated API docs
+
+            # Generate Swagger docs
             php artisan l5-swagger:generate
-            
-            # ضبط الصلاحيات لـ Nginx في كل مرة لضمان العمل
-            sudo chown -R nginx:nginx /var/www/my-app
+
+            # Ensure framework directories exist
+            mkdir -p /var/www/my-app/storage/framework/{sessions,views,cache}
+
+            # Fix permissions — php-fpm runs as apache not nginx
+            sudo chown -R apache:apache /var/www/my-app/storage /var/www/my-app/bootstrap/cache
             sudo chmod -R 775 /var/www/my-app/storage /var/www/my-app/bootstrap/cache
+            
+            # Fix SELinux contexts (Crucial for CentOS/RedHat servers)
+            sudo chcon -Rt httpd_sys_rw_content_t /var/www/my-app/storage 2>/dev/null || true
+            sudo chcon -Rt httpd_sys_rw_content_t /var/www/my-app/bootstrap/cache 2>/dev/null || true
