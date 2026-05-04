@@ -65,7 +65,8 @@
                                                         style="margin:0 0 3px 0; font-size:11px; font-weight:bold; color:#14594F;">
                                                         الاسم</p>
                                                     <p style="margin:0; font-size:15px; font-weight:bold; color:#222;">
-                                                        {{ $consultation->name }}</p>
+                                                        {{ $consultation->name }}
+                                                    </p>
                                                 </td>
                                             </tr>
                                         </table>
@@ -87,7 +88,8 @@
                                                         style="margin:0 0 3px 0; font-size:11px; font-weight:bold; color:#14594F;">
                                                         رقم الهاتف</p>
                                                     <p style="margin:0; font-size:15px; font-weight:bold; color:#222;">
-                                                        {{ $consultation->phone }}</p>
+                                                        {{ $consultation->phone }}
+                                                    </p>
                                                 </td>
                                             </tr>
                                         </table>
@@ -104,12 +106,13 @@
                                                         style="width:40px; height:40px; background:#f0f9f8; border-radius:10px; text-align:center; line-height:40px; font-size:18px;">
                                                         ✉️</div>
                                                 </td>
-                                                <td style="vertical-align: middle; text-align:right;">
+                                                <td style="vertical-align: middle; text-align:right; max-width: 100px">
                                                     <p
                                                         style="margin:0 0 3px 0; font-size:11px; font-weight:bold; color:#14594F;">
                                                         البريد الإلكتروني</p>
                                                     <p style="margin:0; font-size:15px; font-weight:bold; color:#222;">
-                                                        {{ $consultation->email }}</p>
+                                                        {{ $consultation->email }}
+                                                    </p>
                                                 </td>
                                             </tr>
                                         </table>
@@ -155,7 +158,8 @@
                                                         الرسالة</p>
                                                     <p
                                                         style="margin:0; font-size:14px; color:#444; line-height:1.8; background:#fafaf9; padding:12px 16px; border-radius:8px; border-right:3px solid #14594F;">
-                                                        {{ $consultation->message ?? 'لا توجد رسالة' }}</p>
+                                                        {{ $consultation->message ?? 'لا توجد رسالة' }}
+                                                    </p>
                                                 </td>
                                             </tr>
                                         </table>
