@@ -106,7 +106,7 @@
                                                         style="width:40px; height:40px; background:#f0f9f8; border-radius:10px; text-align:center; line-height:40px; font-size:18px;">
                                                         ✉️</div>
                                                 </td>
-                                                <td style="vertical-align: middle; text-align:right; max-width: 180px">
+                                                <td style="vertical-align: middle; text-align:right; max-width: 200px">
                                                     <p
                                                         style="margin:0 0 3px 0; font-size:11px; font-weight:bold; color:#14594F;">
                                                         البريد الإلكتروني</p>
