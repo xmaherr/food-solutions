@@ -5,6 +5,7 @@
         --text-color: {{ config('branding.text_color') }};
         --surface-color: {{ config('branding.surface_color') }};
         --accent-color: {{ config('branding.accent_color') }};
+        --nav-hover-color: {{ config('branding.nav_hover_color') }};
     }
 </style>
 <script>
@@ -17,6 +18,7 @@
                     text: 'var(--text-color)',
                     surface: 'var(--surface-color)',
                     accent: 'var(--accent-color)',
+                    navhover: 'var(--nav-hover-color)',
                 }
             }
         }
