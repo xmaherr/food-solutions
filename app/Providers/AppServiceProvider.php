@@ -12,7 +12,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if (! file_exists(config_path('branding.php'))) {
+            config(['branding' => require config_path('branding.example.php')]);
+        }
     }
 
     /**

@@ -25,7 +25,7 @@
                 <td class="py-3 px-6 text-left">{{ $section->title }}</td>
                 <td class="py-3 px-6 text-left">{{ $section->subtitle }}</td>
                 <td class="py-3 px-6 text-center">
-                    <a href="{{ route('admin.home-sections.edit', $section) }}" class="text-blue-500 hover:text-blue-700 mr-2">Edit</a>
+                    <a href="{{ route('admin.home-sections.edit', $section) }}" class="text-primary hover:text-primary/80 mr-2">Edit</a>
                     <form action="{{ route('admin.home-sections.destroy', $section) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure?');">
                         @csrf @method('DELETE')
                         <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>

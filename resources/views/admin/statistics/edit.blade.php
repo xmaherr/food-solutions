@@ -38,7 +38,7 @@
         </div>
 
         <div class="flex justify-end">
-            <button type="submit" class="bg-primary text-white px-6 py-2 rounded hover:bg-primary/90 transition-colors">
+            <button type="submit" class="bg-primary text-text px-6 py-2 rounded hover:bg-primary/90 transition-colors">
                 Save Changes
             </button>
         </div>

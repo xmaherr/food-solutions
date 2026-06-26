@@ -3,7 +3,7 @@
 @section('content')
 <div class="flex justify-between items-center mb-6">
     <h2 class="text-2xl font-bold text-gray-800">Statistics Management</h2>
-    <a href="{{ route('admin.statistics.edit', $statistic) }}" class="bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors">
+    <a href="{{ route('admin.statistics.edit', $statistic) }}" class="bg-primary text-text px-4 py-2 rounded hover:bg-primary/90 transition-colors">
         Edit Statistics
     </a>
 </div>

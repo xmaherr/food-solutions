@@ -7,7 +7,7 @@
             <h3 class="text-gray-500 text-sm">Total Consultations</h3>
             <p class="text-3xl font-bold text-gray-800">{{ $totals['consultations'] }}</p>
             @if($totals['unread_consultations'] > 0)
-                <p class="text-sm text-red-600 font-bold mt-2">{{ $totals['unread_consultations'] }} Unread</p>
+                <p class="text-sm text-secondary font-bold mt-2">{{ $totals['unread_consultations'] }} Unread</p>
             @endif
         </div>
         <div class="bg-white p-6 rounded shadow border-l-4 border-primary">

@@ -20,19 +20,19 @@
         </thead>
         <tbody class="text-gray-600 text-sm font-light">
             @foreach($consultations as $consultation)
-            <tr class="border-b border-gray-200 hover:bg-gray-50 {{ !$consultation->is_read ? 'bg-orange-50 font-semibold' : '' }}">
+            <tr class="border-b border-gray-200 hover:bg-gray-50 {{ !$consultation->is_read ? 'bg-secondary/10 font-semibold' : '' }}">
                 <td class="py-3 px-6 text-left">{{ $consultation->created_at->format('Y-m-d H:i') }}</td>
                 <td class="py-3 px-6 text-left">{{ $consultation->name }}</td>
                 <td class="py-3 px-6 text-left">{{ $consultation->service->title_ar ?? 'N/A' }}</td>
                 <td class="py-3 px-6 text-center">
                     @if($consultation->is_read)
-                        <span class="text-green-500">Read</span>
+                        <span class="text-primary">Read</span>
                     @else
                         <span class="text-red-500">Unread</span>
                     @endif
                 </td>
                 <td class="py-3 px-6 text-center">
-                    <a href="{{ route('admin.consultations.show', $consultation) }}" class="text-blue-500 hover:text-blue-700 mr-2">View</a>
+                    <a href="{{ route('admin.consultations.show', $consultation) }}" class="text-primary hover:text-primary/80 mr-2">View</a>
                     <form action="{{ route('admin.consultations.destroy', $consultation) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure?');">
                         @csrf @method('DELETE')
                         <button type="submit" class="text-red-500 hover:text-red-700">Delete</button>

@@ -21,7 +21,7 @@
                 <td class="py-3 px-6 text-left">{{ $user->email }}</td>
                 <td class="py-3 px-6 text-left">{{ ucfirst($user->role) }}</td>
                 <td class="py-3 px-6 text-center">
-                    <a href="{{ route('admin.users.edit', $user) }}" class="text-blue-500 hover:text-blue-700 mr-2">Edit</a>
+                    <a href="{{ route('admin.users.edit', $user) }}" class="text-primary hover:text-primary/80 mr-2">Edit</a>
                     @if(auth()->id() !== $user->id)
                     <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure?');">
                         @csrf @method('DELETE')
