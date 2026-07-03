@@ -265,18 +265,10 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthenticated"
-                    },
                     "422": {
                         "description": "Validation Error"
                     }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
+                }
             }
         },
         "/api/contacts": {
@@ -472,7 +464,7 @@
                 "tags": [
                     "Services"
                 ],
-                "summary": "Get all active services",
+                "summary": "Get all active services with their reviews",
                 "operationId": "97de511018def32ca0ccbc800756c538",
                 "responses": {
                     "200": {
@@ -482,7 +474,8 @@
                                 "schema": {
                                     "properties": {
                                         "total": {
-                                            "type": "integer"
+                                            "type": "integer",
+                                            "example": 5
                                         },
                                         "data": {
                                             "type": "array",
@@ -511,6 +504,40 @@
                                                     },
                                                     "image": {
                                                         "type": "string"
+                                                    },
+                                                    "service_reviews": {
+                                                        "properties": {
+                                                            "total": {
+                                                                "type": "integer",
+                                                                "example": 10
+                                                            },
+                                                            "averageRate": {
+                                                                "type": "number",
+                                                                "format": "float",
+                                                                "example": 4.5
+                                                            },
+                                                            "data": {
+                                                                "type": "array",
+                                                                "items": {
+                                                                    "properties": {
+                                                                        "name": {
+                                                                            "type": "string",
+                                                                            "example": "أحمد محمد"
+                                                                        },
+                                                                        "comment": {
+                                                                            "type": "string",
+                                                                            "example": "خدمة رائعة"
+                                                                        },
+                                                                        "rate": {
+                                                                            "type": "integer",
+                                                                            "example": 5
+                                                                        }
+                                                                    },
+                                                                    "type": "object"
+                                                                }
+                                                            }
+                                                        },
+                                                        "type": "object"
                                                     }
                                                 },
                                                 "type": "object"
@@ -561,6 +588,113 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/services/reviews": {
+            "post": {
+                "tags": [
+                    "Service Reviews"
+                ],
+                "summary": "Submit a new review for a service",
+                "operationId": "1c3a25dbee21dd0aa117751c8c6b2e1f",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "service_id",
+                                    "name",
+                                    "rate"
+                                ],
+                                "properties": {
+                                    "service_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "أحمد محمد"
+                                    },
+                                    "comment": {
+                                        "type": "string",
+                                        "example": "الخدمة ممتازة وسريعة جداً، أنصح بالتعامل معهم.",
+                                        "nullable": true
+                                    },
+                                    "rate": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 4.5,
+                                        "maximum": 5,
+                                        "minimum": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "210": {
+                        "description": "Review submitted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Review submitted successfully!"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "service_id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "أحمد محمد"
+                                                },
+                                                "comment": {
+                                                    "type": "string",
+                                                    "example": "الخدمة ممتازة وسريعة جداً، أنصح بالتعامل معهم."
+                                                },
+                                                "rate": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 4.5
+                                                },
+                                                "updated_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2026-07-03T08:00:00.000000Z"
+                                                },
+                                                "created_at": {
+                                                    "type": "string",
+                                                    "format": "date-time",
+                                                    "example": "2026-07-03T08:00:00.000000Z"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
                     }
                 }
             }
@@ -634,6 +768,10 @@
         {
             "name": "Services",
             "description": "Services"
+        },
+        {
+            "name": "Service Reviews",
+            "description": "Service Reviews"
         },
         {
             "name": "Statistics",

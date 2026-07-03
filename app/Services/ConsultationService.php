@@ -11,10 +11,11 @@ use Illuminate\Support\Facades\Mail;
 
 class ConsultationService
 {
-    public function store(User $user, array $data): Consultation
+    public function store(array $data): Consultation
     {
+        $user = auth('sanctum')->user() ?? null;
         $consultation = Consultation::create([
-            'user_id' => $user->id,
+            'user_id' => $user?->id ?? null,
             'name' => $data['name'],
             'phone' => $data['phone'],
             'email' => $data['email'],
@@ -31,14 +32,14 @@ class ConsultationService
     {
         $emailSetting = Setting::where('key', 'consultation_email')->first();
 
-        if (! $emailSetting?->value) {
+        if (!$emailSetting?->value) {
             return;
         }
 
         try {
             Mail::to($emailSetting->value)->send(new ConsultationMail($consultation));
         } catch (\Exception $e) {
-            Log::error('Failed to send consultation email: '.$e->getMessage());
+            Log::error('Failed to send consultation email: ' . $e->getMessage());
         }
     }
 }

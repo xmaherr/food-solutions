@@ -13,7 +13,6 @@ class ConsultationController extends Controller
     #[OA\Post(
         path: '/api/consultation',
         summary: 'Submit a new request',
-        security: [['sanctum' => []]],
         tags: ['Consultations'],
         requestBody: new OA\RequestBody(
             required: true,
@@ -39,13 +38,12 @@ class ConsultationController extends Controller
                     ]
                 )
             ),
-            new OA\Response(response: 401, description: 'Unauthenticated'),
             new OA\Response(response: 422, description: 'Validation Error'),
         ]
     )]
     public function store(StoreConsultationRequest $request, ConsultationService $consultationService): JsonResponse
     {
-        $consultationService->store($request->user(), $request->validated());
+        $consultationService->store($request->validated());
 
         return response()->json([
             'success' => true,

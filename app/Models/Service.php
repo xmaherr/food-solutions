@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasImageAttribute;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
 class Service extends Model
 {
     use HasImageAttribute;
@@ -28,5 +28,9 @@ class Service extends Model
     public function consultations()
     {
         return $this->hasMany(Consultation::class);
+    }
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(ServiceReview::class);
     }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ConsultationController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\HomeSectionController;
+use App\Http\Controllers\Admin\PushNotificationController;
 
 Route::get('/', function () {
     return redirect('/admin/login');
@@ -21,11 +22,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        
+
         Route::resource('home-sections', HomeSectionController::class);
         Route::resource('services', ServiceController::class);
         Route::resource('contacts', ContactController::class);
-        
+
         Route::get('consultations', [ConsultationController::class, 'index'])->name('consultations.index');
         Route::get('consultations/{consultation}', [ConsultationController::class, 'show'])->name('consultations.show');
         Route::delete('consultations/{consultation}', [ConsultationController::class, 'destroy'])->name('consultations.destroy');
@@ -38,5 +39,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('statistics', [\App\Http\Controllers\Admin\StatisticController::class, 'index'])->name('statistics.index');
         Route::get('statistics/{statistic}/edit', [\App\Http\Controllers\Admin\StatisticController::class, 'edit'])->name('statistics.edit');
         Route::put('statistics/{statistic}', [\App\Http\Controllers\Admin\StatisticController::class, 'update'])->name('statistics.update');
+
+        Route::get('push-notifications', [PushNotificationController::class, 'index'])->name('push-notifications.index');
+        Route::get('push-notifications/create', [PushNotificationController::class, 'create'])->name('push-notifications.create');
+        Route::post('push-notifications', [PushNotificationController::class, 'store'])->name('push-notifications.store');
     });
 });
