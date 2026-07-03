@@ -14,15 +14,37 @@ class FirebaseNotificationService
     private function getGoogleAccessToken(): ?string
     {
         try {
-            $filePath = base_path(env('FIREBASE_CREDENTIALS_PATH'));
+            $client = new GoogleClient();
 
-            if (!file_exists($filePath)) {
-                Log::error("Firebase credentials file not found at: " . $filePath);
-                return null;
+            if (env('FIREBASE_PRIVATE_KEY') && env('FIREBASE_CLIENT_EMAIL')) {
+                $privateKey = str_replace('\n', "\n", env('FIREBASE_PRIVATE_KEY'));
+                $clientEmail = env('FIREBASE_CLIENT_EMAIL');
+
+                $authConfig = [
+                    'type' => 'service_account',
+                    'project_id' => env('FIREBASE_PROJECT_ID'),
+                    'private_key_id' => env('FIREBASE_PRIVATE_KEY_ID'),
+                    'private_key' => $privateKey,
+                    'client_email' => $clientEmail,
+                    'client_id' => env('FIREBASE_CLIENT_ID'),
+                    'auth_uri' => 'https://accounts.google.com/o/oauth2/auth',
+                    'token_uri' => 'https://oauth2.googleapis.com/token',
+                    'auth_provider_x509_cert_url' => 'https://www.googleapis.com/oauth2/v1/certs',
+                    'client_x509_cert_url' => 'https://www.googleapis.com/robot/v1/metadata/x509/' . rawurlencode($clientEmail),
+                    'universe_domain' => 'googleapis.com',
+                ];
+                $client->setAuthConfig($authConfig);
+            } else {
+                $filePath = base_path(env('FIREBASE_CREDENTIALS_PATH', 'storage/app/firebase/firebase_credentials.json'));
+
+                if (!file_exists($filePath)) {
+                    Log::error("Firebase credentials not found in env variables or at file path: " . $filePath);
+                    return null;
+                }
+
+                $client->setAuthConfig($filePath);
             }
 
-            $client = new GoogleClient();
-            $client->setAuthConfig($filePath);
             $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
             $client->fetchAccessTokenWithAssertion();
 
