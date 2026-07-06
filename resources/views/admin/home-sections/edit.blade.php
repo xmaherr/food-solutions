@@ -13,21 +13,58 @@
                     <p class="text-xs text-gray-500 mt-1">Leave empty to keep existing image.</p>
                 @endif
             </div>
+
+            {{-- Title --}}
             <div>
-                <label class="block text-gray-700 mb-2">Title</label>
-                <input type="text" name="title" value="{{ $home_section->title }}" class="w-full border rounded px-3 py-2" required>
+                <label class="block text-gray-700 mb-2">Title (Arabic)</label>
+                <input type="text" name="title_ar" value="{{ old('title_ar', $home_section->title_ar) }}"
+                    class="w-full border rounded px-3 py-2 @error('title_ar') border-red-500 @enderror"
+                    dir="rtl" required>
+                @error('title_ar') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
             <div>
-                <label class="block text-gray-700 mb-2">Subtitle</label>
-                <input type="text" name="subtitle" value="{{ $home_section->subtitle }}" class="w-full border rounded px-3 py-2" required>
+                <label class="block text-gray-700 mb-2">Title (English)</label>
+                <input type="text" name="title_en" value="{{ old('title_en', $home_section->title_en) }}"
+                    class="w-full border rounded px-3 py-2 @error('title_en') border-red-500 @enderror"
+                    dir="ltr" required>
+                @error('title_en') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            {{-- Subtitle --}}
+            <div>
+                <label class="block text-gray-700 mb-2">Subtitle (Arabic)</label>
+                <input type="text" name="subtitle_ar" value="{{ old('subtitle_ar', $home_section->subtitle_ar) }}"
+                    class="w-full border rounded px-3 py-2 @error('subtitle_ar') border-red-500 @enderror"
+                    dir="rtl" required>
+                @error('subtitle_ar') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+            <div>
+                <label class="block text-gray-700 mb-2">Subtitle (English)</label>
+                <input type="text" name="subtitle_en" value="{{ old('subtitle_en', $home_section->subtitle_en) }}"
+                    class="w-full border rounded px-3 py-2 @error('subtitle_en') border-red-500 @enderror"
+                    dir="ltr" required>
+                @error('subtitle_en') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            {{-- Description --}}
+            <div class="md:col-span-2">
+                <label class="block text-gray-700 mb-2">Description (Arabic)</label>
+                <textarea name="description_ar"
+                    class="w-full border rounded px-3 py-2 @error('description_ar') border-red-500 @enderror"
+                    rows="3" dir="rtl" required>{{ old('description_ar', $home_section->description_ar) }}</textarea>
+                @error('description_ar') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
             <div class="md:col-span-2">
-                <label class="block text-gray-700 mb-2">Description</label>
-                <textarea name="description" class="w-full border rounded px-3 py-2" rows="4" required>{{ $home_section->description }}</textarea>
+                <label class="block text-gray-700 mb-2">Description (English)</label>
+                <textarea name="description_en"
+                    class="w-full border rounded px-3 py-2 @error('description_en') border-red-500 @enderror"
+                    rows="3" dir="ltr" required>{{ old('description_en', $home_section->description_en) }}</textarea>
+                @error('description_en') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
+
             <div>
                 <label class="block text-gray-700 mb-2">Sort Order</label>
-                <input type="number" name="sort_order" value="{{ $home_section->sort_order }}" class="w-full border rounded px-3 py-2">
+                <input type="number" name="sort_order" value="{{ old('sort_order', $home_section->sort_order) }}" class="w-full border rounded px-3 py-2">
             </div>
         </div>
         <div class="mt-6">

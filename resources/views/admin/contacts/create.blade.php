@@ -12,34 +12,51 @@
                     <option value="social">Social</option>
                 </select>
             </div>
-            <div id="title-container">
-                <label class="block text-gray-700 mb-2">Title</label>
-                <input type="text" name="title" id="title-input" class="w-full border rounded px-3 py-2" required>
+
+            {{-- Contact-only Title fields --}}
+            <div id="title-ar-container">
+                <label class="block text-gray-700 mb-2">Title (Arabic)</label>
+                <input type="text" name="title_ar" id="title-ar-input" value="{{ old('title_ar') }}"
+                    class="w-full border rounded px-3 py-2 @error('title_ar') border-red-500 @enderror"
+                    dir="rtl" placeholder="العنوان بالعربية">
+                @error('title_ar') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>
-            <div id="platform-container" style="display: none;">
+
+            <div id="title-en-container">
+                <label class="block text-gray-700 mb-2">Title (English)</label>
+                <input type="text" name="title_en" id="title-en-input" value="{{ old('title_en') }}"
+                    class="w-full border rounded px-3 py-2 @error('title_en') border-red-500 @enderror"
+                    dir="ltr" placeholder="Title in English">
+                @error('title_en') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            {{-- Social-only Platform field --}}
+            <div id="platform-container" class="md:col-span-2" style="display: none;">
                 <label class="block text-gray-700 mb-2">Platform</label>
                 <select name="platform_id" id="platform-select" class="w-full border rounded px-3 py-2">
                     <option value="">Select Platform</option>
                     @foreach($platforms as $platform)
-                        <option value="{{ $platform->id }}">{{ $platform->name }}</option>
+                        <option value="{{ $platform->id }}">{{ $platform->name_en }}</option>
                     @endforeach
                 </select>
+                <p class="text-xs text-gray-500 mt-1">The title will be automatically set to the platform name.</p>
             </div>
+
             <div>
                 <label class="block text-gray-700 mb-2">Icon File</label>
                 <input type="file" name="icon" class="w-full border rounded px-3 py-2" required>
             </div>
             <div>
                 <label class="block text-gray-700 mb-2">Value</label>
-                <input type="text" name="value" class="w-full border rounded px-3 py-2" required>
+                <input type="text" name="value" value="{{ old('value') }}" class="w-full border rounded px-3 py-2" required>
             </div>
             <div class="md:col-span-2">
                 <label class="block text-gray-700 mb-2">Link (Optional)</label>
-                <input type="text" name="link" class="w-full border rounded px-3 py-2">
+                <input type="text" name="link" value="{{ old('link') }}" class="w-full border rounded px-3 py-2">
             </div>
             <div>
                 <label class="block text-gray-700 mb-2">Sort Order</label>
-                <input type="number" name="sort_order" class="w-full border rounded px-3 py-2" value="0">
+                <input type="number" name="sort_order" class="w-full border rounded px-3 py-2" value="{{ old('sort_order', 0) }}">
             </div>
             <div class="md:col-span-2 mt-4">
                 <label class="inline-flex items-center">
@@ -56,25 +73,30 @@
 <script>
     function toggleType() {
         const type = document.getElementById('type-select').value;
-        const titleContainer = document.getElementById('title-container');
+        const titleArContainer = document.getElementById('title-ar-container');
+        const titleEnContainer = document.getElementById('title-en-container');
         const platformContainer = document.getElementById('platform-container');
-        const titleInput = document.getElementById('title-input');
+        const titleArInput = document.getElementById('title-ar-input');
+        const titleEnInput = document.getElementById('title-en-input');
         const platformSelect = document.getElementById('platform-select');
 
         if (type === 'social') {
-            titleContainer.style.display = 'none';
+            titleArContainer.style.display = 'none';
+            titleEnContainer.style.display = 'none';
             platformContainer.style.display = 'block';
-            titleInput.removeAttribute('required');
+            titleArInput.removeAttribute('required');
+            titleEnInput.removeAttribute('required');
             platformSelect.setAttribute('required', 'required');
         } else {
-            titleContainer.style.display = 'block';
+            titleArContainer.style.display = 'block';
+            titleEnContainer.style.display = 'block';
             platformContainer.style.display = 'none';
-            titleInput.setAttribute('required', 'required');
+            titleArInput.setAttribute('required', 'required');
+            titleEnInput.setAttribute('required', 'required');
             platformSelect.removeAttribute('required');
         }
     }
-    
-    // Initialize on load
+
     document.addEventListener('DOMContentLoaded', toggleType);
 </script>
 @endsection

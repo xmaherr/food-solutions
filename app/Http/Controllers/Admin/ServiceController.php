@@ -23,25 +23,29 @@ class ServiceController extends Controller
     public function store(Request $request, ImageUploadService $uploadService)
     {
         $data = $request->validate([
-            'title_ar' => 'required|string|max:255',
+            'title_ar'             => 'required|string|max:255',
+            'title_en'             => 'required|string|max:255',
             'short_description_ar' => 'required|string',
-            'long_description_ar' => 'required|string',
-            'image' => 'required|file|image|max:5120',
-            'icon' => 'required|file|image|max:5120',
-            'sort_order' => 'integer',
-            'points' => 'nullable|array'
+            'short_description_en' => 'required|string',
+            'long_description_ar'  => 'required|string',
+            'long_description_en'  => 'required|string',
+            'image'                => 'required|file|image|max:5120',
+            'icon'                 => 'required|file|image|max:5120',
+            'sort_order'           => 'integer',
+            'points_ar'            => 'nullable|array',
+            'points_en'            => 'nullable|array',
         ]);
 
         if ($request->hasFile('image')) {
             $data['image'] = $uploadService->upload($request->file('image'), 'images/services');
         }
-        
+
         if ($request->hasFile('icon')) {
             $data['icon'] = $uploadService->upload($request->file('icon'), 'icons/services');
         }
 
         $data['is_active'] = $request->has('is_active');
-        
+
         Service::create($data);
         return redirect()->route('admin.services.index')->with('success', 'Service created successfully.');
     }
@@ -54,13 +58,17 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service, ImageUploadService $uploadService)
     {
         $data = $request->validate([
-            'title_ar' => 'required|string|max:255',
+            'title_ar'             => 'required|string|max:255',
+            'title_en'             => 'required|string|max:255',
             'short_description_ar' => 'required|string',
-            'long_description_ar' => 'required|string',
-            'image' => 'nullable|file|image|max:5120',
-            'icon' => 'nullable|file|image|max:5120',
-            'sort_order' => 'integer',
-            'points' => 'nullable|array'
+            'short_description_en' => 'required|string',
+            'long_description_ar'  => 'required|string',
+            'long_description_en'  => 'required|string',
+            'image'                => 'nullable|file|image|max:5120',
+            'icon'                 => 'nullable|file|image|max:5120',
+            'sort_order'           => 'integer',
+            'points_ar'            => 'nullable|array',
+            'points_en'            => 'nullable|array',
         ]);
 
         if ($request->hasFile('image')) {
@@ -68,7 +76,7 @@ class ServiceController extends Controller
         } else {
             unset($data['image']);
         }
-        
+
         if ($request->hasFile('icon')) {
             $data['icon'] = $uploadService->upload($request->file('icon'), 'icons/services', $service->getRawOriginal('icon'));
         } else {
@@ -76,7 +84,7 @@ class ServiceController extends Controller
         }
 
         $data['is_active'] = $request->has('is_active');
-        
+
         $service->update($data);
         return redirect()->route('admin.services.index')->with('success', 'Service updated successfully.');
     }

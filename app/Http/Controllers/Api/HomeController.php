@@ -41,11 +41,20 @@ class HomeController extends Controller
     )]
     public function index()
     {
-        $sections = HomeSection::orderBy('sort_order')->get(['id', 'image', 'title', 'subtitle', 'description', 'sort_order']);
+        $sections = HomeSection::orderBy('sort_order')->get();
+
+        $data = $sections->map(fn ($section) => [
+            'id'          => $section->id,
+            'image'       => $section->image,
+            'title'       => $section->title,       // via accessor → language-aware
+            'subtitle'    => $section->subtitle,    // via accessor → language-aware
+            'description' => $section->description, // via accessor → language-aware
+            'sort_order'  => $section->sort_order,
+        ]);
 
         return response()->json([
-            'total' => $sections->count(),
-            'data' => $sections
+            'total' => $data->count(),
+            'data'  => $data,
         ]);
     }
 }

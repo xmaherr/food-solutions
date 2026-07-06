@@ -45,9 +45,15 @@ class ConsultationController extends Controller
     {
         $consultationService->store($request->validated());
 
+        $lang = app()->bound('current_language') ? app('current_language') : 'ar';
+
+        $message = $lang === 'en'
+            ? 'Your request has been submitted successfully. We will contact you soon.'
+            : 'تم إرسال طلبك بنجاح، سنتواصل معك قريباً';
+
         return response()->json([
             'success' => true,
-            'message' => 'تم إرسال طلبك بنجاح، سنتواصل معك قريباً',
+            'message' => $message,
         ]);
     }
 }

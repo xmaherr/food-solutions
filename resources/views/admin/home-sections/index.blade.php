@@ -10,8 +10,8 @@
             <tr class="bg-gray-100 text-gray-600 text-sm leading-normal">
                 <th class="py-3 px-6 text-left">Sort</th>
                 <th class="py-3 px-6 text-left">Image</th>
-                <th class="py-3 px-6 text-left">Title</th>
-                <th class="py-3 px-6 text-left">Subtitle</th>
+                <th class="py-3 px-6 text-left">Title (AR)</th>
+                <th class="py-3 px-6 text-left">Subtitle (AR)</th>
                 <th class="py-3 px-6 text-center">Actions</th>
             </tr>
         </thead>
@@ -22,8 +22,8 @@
                 <td class="py-3 px-6 text-left">
                     <img src="{{ $section->image }}" class="w-16 h-16 object-cover border" alt="Section Image">
                 </td>
-                <td class="py-3 px-6 text-left">{{ $section->title }}</td>
-                <td class="py-3 px-6 text-left">{{ $section->subtitle }}</td>
+                <td class="py-3 px-6 text-left">{{ $section->title_ar }}</td>
+                <td class="py-3 px-6 text-left">{{ $section->subtitle_ar }}</td>
                 <td class="py-3 px-6 text-center">
                     <a href="{{ route('admin.home-sections.edit', $section) }}" class="text-primary hover:text-primary/80 mr-2">Edit</a>
                     <form action="{{ route('admin.home-sections.destroy', $section) }}" method="POST" class="inline-block" onsubmit="return confirm('Are you sure?');">

@@ -24,18 +24,20 @@ class ContactController extends Controller
     public function store(Request $request, ImageUploadService $uploadService)
     {
         $data = $request->validate([
-            'type' => 'required|in:contact,social',
-            'title' => 'required_if:type,contact|string|max:255|nullable',
+            'type'        => 'required|in:contact,social',
+            'title_ar'    => 'required_if:type,contact|string|max:255|nullable',
+            'title_en'    => 'required_if:type,contact|string|max:255|nullable',
             'platform_id' => 'required_if:type,social|exists:platforms,id|nullable',
-            'icon' => 'required|file|max:5120',
-            'value' => 'required|string|max:255',
-            'link' => 'nullable|string|max:255',
-            'sort_order' => 'integer',
+            'icon'        => 'required|file|max:5120',
+            'value'       => 'required|string|max:255',
+            'link'        => 'nullable|string|max:255',
+            'sort_order'  => 'integer',
         ]);
 
         if ($data['type'] === 'social') {
             $platform = \App\Models\Platform::find($data['platform_id']);
-            $data['title'] = strtoupper($platform->name);
+            $data['title_ar'] = strtoupper($platform->name_en);
+            $data['title_en'] = strtoupper($platform->name_en);
         } else {
             $data['platform_id'] = null;
         }
@@ -45,7 +47,7 @@ class ContactController extends Controller
         }
 
         $data['is_active'] = $request->has('is_active');
-        
+
         Contact::create($data);
         return redirect()->route('admin.contacts.index')->with('success', 'Contact created successfully.');
     }
@@ -59,18 +61,20 @@ class ContactController extends Controller
     public function update(Request $request, Contact $contact, ImageUploadService $uploadService)
     {
         $data = $request->validate([
-            'type' => 'required|in:contact,social',
-            'title' => 'required_if:type,contact|string|max:255|nullable',
+            'type'        => 'required|in:contact,social',
+            'title_ar'    => 'required_if:type,contact|string|max:255|nullable',
+            'title_en'    => 'required_if:type,contact|string|max:255|nullable',
             'platform_id' => 'required_if:type,social|exists:platforms,id|nullable',
-            'icon' => 'nullable|file|max:5120',
-            'value' => 'required|string|max:255',
-            'link' => 'nullable|string|max:255',
-            'sort_order' => 'integer',
+            'icon'        => 'nullable|file|max:5120',
+            'value'       => 'required|string|max:255',
+            'link'        => 'nullable|string|max:255',
+            'sort_order'  => 'integer',
         ]);
 
         if ($data['type'] === 'social') {
             $platform = \App\Models\Platform::find($data['platform_id']);
-            $data['title'] = strtoupper($platform->name);
+            $data['title_ar'] = strtoupper($platform->name_en);
+            $data['title_en'] = strtoupper($platform->name_en);
         } else {
             $data['platform_id'] = null;
         }
@@ -82,7 +86,7 @@ class ContactController extends Controller
         }
 
         $data['is_active'] = $request->has('is_active');
-        
+
         $contact->update($data);
         return redirect()->route('admin.contacts.index')->with('success', 'Contact updated successfully.');
     }

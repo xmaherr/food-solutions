@@ -23,11 +23,14 @@ class HomeSectionController extends Controller
     public function store(Request $request, ImageUploadService $uploadService)
     {
         $data = $request->validate([
-            'image' => 'required|file|image|max:5120',
-            'title' => 'required|string|max:255',
-            'subtitle' => 'required|string|max:255',
-            'description' => 'required|string',
-            'sort_order' => 'integer',
+            'image'          => 'required|file|image|max:5120',
+            'title_ar'       => 'required|string|max:255',
+            'title_en'       => 'required|string|max:255',
+            'subtitle_ar'    => 'required|string|max:255',
+            'subtitle_en'    => 'required|string|max:255',
+            'description_ar' => 'required|string',
+            'description_en' => 'required|string',
+            'sort_order'     => 'integer',
         ]);
 
         if ($request->hasFile('image')) {
@@ -46,11 +49,14 @@ class HomeSectionController extends Controller
     public function update(Request $request, HomeSection $home_section, ImageUploadService $uploadService)
     {
         $data = $request->validate([
-            'image' => 'nullable|file|image|max:5120',
-            'title' => 'required|string|max:255',
-            'subtitle' => 'required|string|max:255',
-            'description' => 'required|string',
-            'sort_order' => 'integer',
+            'image'          => 'nullable|file|image|max:5120',
+            'title_ar'       => 'required|string|max:255',
+            'title_en'       => 'required|string|max:255',
+            'subtitle_ar'    => 'required|string|max:255',
+            'subtitle_en'    => 'required|string|max:255',
+            'description_ar' => 'required|string',
+            'description_en' => 'required|string',
+            'sort_order'     => 'integer',
         ]);
 
         if ($request->hasFile('image')) {
