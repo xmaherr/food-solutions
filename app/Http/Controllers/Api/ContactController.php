@@ -61,28 +61,40 @@ class ContactController extends Controller
     )]
     public function index()
     {
-        $contacts = Contact::where('is_active', true)->where('type', 'contact')->orderBy('sort_order')->get(['title', 'icon', 'value', 'link']);
-        $socials = Contact::with('platform')->where('is_active', true)->where('type', 'social')->orderBy('sort_order')->get(['icon', 'value', 'link', 'platform_id']);
+        $contacts = Contact::where('is_active', true)
+            ->where('type', 'contact')
+            ->orderBy('sort_order')
+            ->get();
 
-        $socialsFormatted = $socials->map(function ($social) {
-            return [
-                'platform' => $social->platform ? [
-                    'id' => $social->platform->id,
-                    'name' => $social->platform->name,
-                    'color' => $social->platform->color,
-                ] : null,
-                'icon' => $social->icon,
-                'value' => $social->value,
-                'link' => $social->link,
-            ];
-        });
+        $socials = Contact::with('platform')
+            ->where('is_active', true)
+            ->where('type', 'social')
+            ->orderBy('sort_order')
+            ->get();
+
+        $contactsFormatted = $contacts->map(fn ($contact) => [
+            'title' => $contact->title, // accessor → language-aware
+            'icon'  => $contact->icon,
+            'value' => $contact->value,
+            'link'  => $contact->link,
+        ]);
+
+        $socialsFormatted = $socials->map(fn ($social) => [
+            'platform' => $social->platform ? [
+                'id'    => $social->platform->id,
+                'name'  => $social->platform->name,  // accessor → language-aware
+                'color' => $social->platform->color,
+            ] : null,
+            'icon'  => $social->icon,
+            'value' => $social->value,
+            'link'  => $social->link,
+        ]);
 
         return response()->json([
-            'total_contacts' => $contacts->count(),
-            'contacts' => $contacts,
-            'total_socials' => $socials->count(),
-            'total_socials' => $socialsFormatted->count(),
-            'socials' => $socialsFormatted
+            'total_contacts' => $contactsFormatted->count(),
+            'contacts'       => $contactsFormatted,
+            'total_socials'  => $socialsFormatted->count(),
+            'socials'        => $socialsFormatted,
         ]);
     }
 }
